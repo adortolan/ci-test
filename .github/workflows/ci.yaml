@@ -16,14 +16,17 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  # Failing tests on purpose
-  failing-tests:
-    name: "Failing tests (on purpose)"
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v1
-      - run: npm ci
-      - uses: ./
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  productionPromotion:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            ref: production
+        - name: Reset promotion branch
+          run: |
+            git fetch origin main:main
+            git reset --hard main
+        - name: Create Pull Request
+          uses: peter-evans/create-pull-request@v5
+          with:
+            branch: production-promotion
