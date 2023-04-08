@@ -1,0 +1,11 @@
+name: ci-javascript-workflow
+on: [push]
+jobs:
+  check-application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/javascript-action@v1
+        with:
+          milliseconds: 1000
+      - run: npm run test
